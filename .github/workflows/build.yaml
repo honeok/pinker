@@ -69,12 +69,12 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: "Setup Go"
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: "go.mod"
           check-latest: true
@@ -109,7 +109,7 @@ jobs:
           zip -9vr ${{ env.ASSET_NAME }}.zip .
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: github.event_name == 'release' || contains(github.ref, 'refs/tags/')
         with:
           name: ${{ env.ASSET_NAME }}
@@ -127,7 +127,7 @@ jobs:
 
     steps:
       - name: "Download artifact"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: /tmp/assets
           pattern: pinker-*
