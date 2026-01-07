@@ -17,6 +17,9 @@ concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: "Build binary"
@@ -81,11 +84,12 @@ jobs:
 
       - name: "Generate asset name"
         run: |
-          SUFFIX=""
+          set -eEuxo pipefail
+          BINARY_NAME="pinker-${GOOS}-${GOARCH}"
           if [ -n "$GOARM" ]; then
-            SUFFIX="-v$GOARM"
+            BINARY_NAME="${BINARY_NAME}v${GOARM}"
           fi
-          echo "ASSET_NAME=pinker-${GOOS}-${GOARCH}${SUFFIX}" >> "$GITHUB_ENV"
+          echo "BINARY_NAME=${BINARY_NAME}" >> "$GITHUB_ENV"
 
       - name: "Build pinker"
         run: |
@@ -106,14 +110,14 @@ jobs:
           cp $GITHUB_WORKSPACE/README.md ./README.md
           cp $GITHUB_WORKSPACE/LICENSE ./LICENSE
           touch -mt $(date +%Y01010000) *
-          zip -9vr ${{ env.ASSET_NAME }}.zip .
+          zip -9vr ${{ env.BINARY_NAME }}.zip .
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v6
         if: github.event_name == 'release' || contains(github.ref, 'refs/tags/')
         with:
-          name: ${{ env.ASSET_NAME }}
-          path: ./dist/${{ env.ASSET_NAME }}.zip
+          name: ${{ env.BINARY_NAME }}
+          path: ./dist/${{ env.BINARY_NAME }}.zip
           if-no-files-found: error
           retention-days: 1
 
