@@ -10,7 +10,7 @@ Secure your container supply chain by automatically pinning Docker images to imm
 > [!TIP]
 > Tags are mutable. Digests are forever.
 
-<img width="1930" height="994" src="https://github.com/user-attachments/assets/d840ed52-2013-4625-8d1a-2f8abbd2a5f1" />
+<img width="1930" height="994" src="https://github.com/user-attachments/assets/6282fc02-7d3b-4dc0-a873-5dbe5c19b682" />
 
 ## Why Pinker?
 
