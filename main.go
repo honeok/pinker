@@ -148,7 +148,7 @@ func replaceInLine(line string) (string, error) {
 	}
 	suffix = strings.TrimRight(suffix, " \t")
 
-	newLine := fmt.Sprintf("%s%s%s%s%s # %s", prefix, quote1, newRef, quote2, suffix, tag)
+	newLine := fmt.Sprintf("%s%s%s%s%s", prefix, quote1, newRef, quote2, suffix)
 
 	return newLine, nil
 }

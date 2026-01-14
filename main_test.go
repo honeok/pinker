@@ -98,27 +98,32 @@ func TestReplaceInLine(t *testing.T) {
 		{
 			name: "Dockerfile FROM simple",
 			line: "FROM nginx:latest",
-			want: "FROM nginx:latest@sha256:" + mockSHA + " # latest",
+			want: "FROM nginx:latest@sha256:" + mockSHA,
 		},
 		{
 			name: "Dockerfile FROM with AS",
 			line: "FROM nginx:latest AS builder",
-			want: "FROM nginx:latest@sha256:" + mockSHA + " AS builder # latest",
+			want: "FROM nginx:latest@sha256:" + mockSHA + " AS builder",
 		},
 		{
 			name: "Docker Compose image",
 			line: "    image: postgres:14",
-			want: "    image: postgres:14@sha256:" + mockSHA + " # 14",
+			want: "    image: postgres:14@sha256:" + mockSHA,
 		},
 		{
 			name: "With Quotes",
 			line: `    image: "postgres:14"`,
-			want: `    image: "postgres:14@sha256:` + mockSHA + `" # 14`,
+			want: `    image: "postgres:14@sha256:` + mockSHA + `"`,
 		},
 		{
 			name: "Already Pinned (Should ignore)",
 			line: "FROM nginx:latest@sha256:" + mockSHA,
 			want: "FROM nginx:latest@sha256:" + mockSHA,
+		},
+		{
+			name: "Already Pinned with comment (Should strip comment but keep pinned)",
+			line: "FROM nginx:latest@sha256:" + mockSHA + " # latest",
+			want: "FROM nginx:latest@sha256:" + mockSHA + " # latest",
 		},
 		{
 			name: "Commented out (Should ignore)",
@@ -181,7 +186,7 @@ FROM alpine:3.18 AS builder
 	}
 	newContent := string(newContentBytes)
 
-	expectedSnippet := "FROM alpine:3.18@sha256:" + mockSHA + " # 3.18"
+	expectedSnippet := "FROM alpine:3.18@sha256:" + mockSHA
 
 	if !strings.Contains(newContent, expectedSnippet) {
 		t.Errorf("File content did not update correctly.\nGot:\n%s\nExpected to contain:\n%s", newContent, expectedSnippet)
