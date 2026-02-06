@@ -5,7 +5,7 @@ on:
   release:
     types: [published]
   push:
-    branches: ["**"]
+    branches: ["master", "dev"]
     tags: ["v*"]
     paths-ignore:
       - "**.md"
@@ -109,7 +109,7 @@ jobs:
           set -eEuxo pipefail
           cp $GITHUB_WORKSPACE/README.md ./README.md
           cp $GITHUB_WORKSPACE/LICENSE ./LICENSE
-          touch -mt $(date +%Y01010000) *
+          touch -mt "$(date +%Y01010000)" -- *
           zip -9vr ${{ env.BINARY_NAME }}.zip .
 
       - name: "Upload artifact"
@@ -130,6 +130,11 @@ jobs:
       contents: write
 
     steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - name: "Download artifact"
         uses: actions/download-artifact@v7
         with:
@@ -144,10 +149,22 @@ jobs:
           ls -R
           sha256sum *.zip > sha256sum.txt
 
+      - name: "Fetch tags"
+        run: |
+          echo "PREVIOUS_VERSION=$(git describe --tags --abbrev=0 --match "v*" HEAD^ 2> /dev/null || echo "")" >> "$GITHUB_ENV"
+          echo "CURRENT_VERSION=${{ github.ref_name }}" >> "$GITHUB_ENV"
+
+      - name: "Build Changelog"
+        run: |
+          cp ./.github/genReleaseNote.sh ./
+          chmod +x genReleaseNote.sh
+          ./genReleaseNote.sh "$PREVIOUS_VERSION" "$CURRENT_VERSION"
+          rm -f genReleaseNote.sh || exit 1
+
       - name: "Upload release"
         uses: softprops/action-gh-release@v2
         env:
           GH_TOKEN: ${{ github.token }}
         with:
+          body_path: ./release.md
           files: /tmp/assets/*
-          generate_release_notes: true
