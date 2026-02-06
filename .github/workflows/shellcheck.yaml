@@ -1,0 +1,31 @@
+---
+name: "Shellcheck"
+
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - "**/*.sh"
+  pull_request:
+    paths:
+      - "**/*.sh"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shellcheck:
+    name: "Run shellcheck"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+
+      - name: "Run shellcheck"
+        uses: luizm/action-sh-checker@master
+        env:
+          SHFMT_OPTS: -i 4 -sr
