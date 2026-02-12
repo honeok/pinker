@@ -3,7 +3,7 @@ name: "Bump Go Version"
 
 on:
   push:
-    branches: [master, release]
+    branches: ["master", "dev"]
     paths:
       - ".github/bump-go-version.sh"
       - ".github/workflows/bump-go-version.yaml"

@@ -3,13 +3,10 @@ name: "Shellcheck"
 
 on:
   push:
-    branches:
-      - "*"
-    paths:
-      - "**/*.sh"
+    branches: ["master", "dev"]
+    paths: ["**/*.sh"]
   pull_request:
-    paths:
-      - "**/*.sh"
+    paths: ["**/*.sh"]
   workflow_dispatch:
 
 concurrency:
