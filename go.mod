@@ -3,7 +3,7 @@ module github.com/honeok/pinker
 go 1.26.0
 
 require (
-	github.com/caarlos0/log v0.5.4
+	github.com/caarlos0/log v0.6.0
 	github.com/google/go-containerregistry v0.20.7
 )
 
