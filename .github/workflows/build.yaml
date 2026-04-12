@@ -160,7 +160,7 @@ jobs:
           rm -f genReleaseNote.sh || exit 1
 
       - name: "Upload release"
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GH_TOKEN: ${{ github.token }}
         with:
