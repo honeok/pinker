@@ -1,6 +1,6 @@
 module github.com/honeok/pinker
 
-go 1.26.3
+go 1.26.4
 
 require (
 	github.com/caarlos0/log v0.6.0
