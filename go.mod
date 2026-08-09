@@ -4,7 +4,7 @@ go 1.26.5
 
 require (
 	github.com/caarlos0/log v0.6.2
-	github.com/google/go-containerregistry v0.21.8
+	github.com/google/go-containerregistry v0.21.9
 )
 
 require (
